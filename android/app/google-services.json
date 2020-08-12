@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "958627505768",
+    "firebase_url": "https://poslabs-auth.firebaseio.com",
+    "project_id": "poslabs-auth",
+    "storage_bucket": "poslabs-auth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958627505768:android:c8f9d49f3b8ea8a16b7ddd",
+        "android_client_info": {
+          "package_name": "com.tjcoyoca.poslabauth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958627505768-shobhn1pj7j6alt1jk52c496vfi2c6av.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tjcoyoca.poslabauth",
+            "certificate_hash": "55b1382e21e5c8094f959d8ab9e72b20a29fd3cd"
+          }
+        },
+        {
+          "client_id": "958627505768-2g3dn2rni3i2djctugl0aq3e12hu99uo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9czR2Bi1w4KQWUCdJYTcpb2NkzpX2qIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958627505768-2g3dn2rni3i2djctugl0aq3e12hu99uo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
