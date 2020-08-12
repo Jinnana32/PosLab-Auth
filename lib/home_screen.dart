@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,20 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:mapbox_gl/mapbox_gl.dart';
+
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+  }
+
+  // Or do other work.
+}
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
   CameraPosition mCameraPosition;
   MapboxMapController mapController;
   List<dynamic> rawCoordinates;
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   String _mapboxAPIKey =
       "sk.eyJ1IjoicG93ZXJvZnBhbmRhIiwiYSI6ImNrZHJia29udDBnZmgycWxpbzNkMTFtZmQifQ.ZPYNj4lf69oPdOxnRdRP1w";
@@ -43,9 +60,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
+  _register() {
+    _firebaseMessaging.getToken().then((token) => print("POSLAB FCM TOKEN: $token"));
+  }
+
+  void initFireBase(){
+
+    _register();
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onBackgroundMessage: myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    initFireBase();
     getLocations();
     setState((){
       mCameraPosition =  CameraPosition(target: LatLng(10.693324, 122.573309), zoom: 12);
