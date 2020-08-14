@@ -35,6 +35,9 @@ dependencies:
   mapbox_gl: ^0.0.5
   geolocator: ^5.3.2+2
   firebase_messaging: 6.0.16
+  flutter_bloc:
+  bloc:
+  equatable: ^1.2.3
 
 dev_dependencies:
   flutter_test:

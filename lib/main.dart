@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-import 'home_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:poslabauth/blocs/location/LocationBloc.dart';
+import 'package:poslabauth/blocs/user/UserBloc.dart';
+import 'package:poslabauth/screens/LoginScreen.dart';
+import 'package:poslabauth/services/LocationService.dart';
+import 'package:poslabauth/services/UserService.dart';
+import 'package:poslabauth/utils/logger.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiBlocProvider(
+    providers: [
+       BlocProvider<UserBloc>(
+        create: (context) => UserBloc(
+          userService: UserService(),
+          logger: Logger()
+        ),
+      ),
+      BlocProvider<LocationBloc>(
+        create: (context) => LocationBloc(
+            locationService: LocationService(),
+            logger: Logger()
+        ),
+      )
+    ],
+    child: App()
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,138 +37,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeScreen(),
-    );
-  }
-}
-
-class LoginScreen extends StatefulWidget {
-
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-
-  void loginUsingFacebook() async {
-      final facebookLogin = FacebookLogin();
-      final result = await facebookLogin.logIn(['email']);
-      final token = result.accessToken.token;
-      final graphResponse = await http.get(
-          'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
-      final profile = jsonDecode(graphResponse.body);
-      print("User profile $profile");
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //loginUsingFacebook();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-            children: <Widget>[
-              SizedBox(height: 50,),
-              Container(
-                margin: EdgeInsets.only(top: 30),
-                child: Center(
-                    child: Text("POSLABS AUTH",
-                    style: TextStyle(fontSize: 30),)
-                ),
-              ),
-              SizedBox(height: 40,),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Image.asset("assets/images/touch_id_icon.png",width: 50, height: 50,),
-                    SizedBox(height: 10),
-                    Text("Use fingerprint to login",
-                      style: TextStyle(color: Colors.grey[600]),)
-                  ],
-                )
-              ),
-              SizedBox(height: 40,),
-              Container(
-                child: RaisedButton.icon(
-                    onPressed: () {
-                      this.loginUsingFacebook();
-                    },
-                    icon: Icon(Icons.face),
-                    label: Text(
-                        "Continue with facebook",
-                        style: TextStyle(color: Colors.white),
-                    ),
-                    color: Colors.blue[800],
-                ),
-              ),
-              Container(
-                child: RaisedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.face),
-                  label: Text(
-                    "Sign in with instagram",
-                  ),
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 30,),
-              Container(
-                  width: 300,
-                  child:Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      color: Colors.black12,
-                      width: 120,
-                      height: 1,
-                    ),
-                    Text("OR"),
-                    Container(
-                      color: Colors.black12,
-                      width: 120,
-                      height: 1,
-                    ),
-                  ],
-
-              )),
-              SizedBox(height: 30,),
-              Container(
-                child: RaisedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.face),
-                  label: Text(
-                    "Sign up with facebook",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  color: Colors.blue[800],
-                ),
-              ),
-              Container(
-                child: RaisedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.face),
-                  label: Text(
-                    "Sign up with instagram",
-                  ),
-                  color: Colors.white,
-                ),
-              ),
-
-            ],)
-        ,
-      ),
+      home: LoginScreen(),
     );
   }
 }
